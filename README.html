@@ -1,0 +1,253 @@
+<div style="font-size: 29px">
+
+
+# H2A Data Analysis Project
+## January 17th Updates 
+## Data Source
+H2A Resources: [Department of Labor Foreign Labor Performance](https://www.dol.gov/agencies/eta/foreign-labor/performance) 
+Here we can find H-2A Disclosure_Data_FY2024-Q4
+
+**Note:** The reporting period covers October 1, 2023 through September 30, 2024 (Fiscal Year 2024), rather than the calendar year. For detailed column descriptions, refer to the [H2A Record Layout Documentation](https://www.dol.gov/sites/dolgov/files/ETA/oflc/pdfs/H-2A_Record_Layout_FY2024_Q4.pdf).
+
+## Data Preparation and Analysis
+
+### 1. Initial Data Loading
+- Loaded the Excel file containing H2A application data
+- Performed initial data inspection
+
+### 2. Data Overview
+```python
+
+rows, columns = df.shape
+print(f"Number of rows: {rows}")
+print(f"Number of columns: {columns}")
+```
+![Description](shape.png)\
+As huge amount of columns names, I choose 50 columns that I think interesting. I also filter the DataFrame based on the condition. 
+![Description](new_column.png)\
+```python
+new_df = df[specific_columns]
+# Filter the DataFrame based on the condition
+filtered_df = new_df[new_df["CASE_STATUS"] == "Determination Issued - Certification"]
+```
+So, the new number of rows is 16498 and the new number of columns is 51.
+
+Since I am interested in the total workers for each state, so I group by the state and sum the total_workers_H2A_Certified. \
+And I got (Ex: Total certified workers in MA this year is 499)\
+![Description](workers.png)
+
+\
+Then I continue to find the general farm datasets. And I downloaded here(https://worldpopulationreview.com/state-rankings/farm-count-by-state)
+![Description](farms.png)
+
+```python
+file_path = "/Users/hdjs7z/Downloads/farm-count-by-state-2024.csv"
+
+# Use read_csv instead of read_excel
+df_farmers = pd.read_csv(file_path)
+
+# Display the first few rows
+print(df_farmers.head())
+```
+The columns include:
+'state', '**FarmCountByState_NumberOfFarms2023**', '**FarmCountByState_FarmOperations2023_Acres**', 'FarmCountByState_NumberOfFarms2022', '**FarmCountByState_NumberOfFarms_TotalSales2022_1000s**'
+
+
+## Next steps:
+1. Number of Famers for each state
+2. Average Salary for H2A visa holders VS average salary for whole farmers for each state
+3. How much acres do one person responsbile 
+3. Merge the datasets to one
+4. Main Crops and its pesticide usage
+
+
+
+## January 17th - January 23rd Updates
+## 1. Handle H2A datasets and solve the problem discussed in last meeting
+![Description](file_7.png)
+
+Here I loaded 7 files from 2018 to 2024(From September 30th, 2017 to October 1st, 2024)<br>
+And I did some date manipulation to extract information for 2018 to 2023 January 1st to the end of the year.<br> 
+![Description](earliest_latest.png)
+
+After I uploaded, I check some basic qualities of the files. 
+The files after 2020(including it) uses the same rules, the column name and description are almost same.
+In 2018 and 2019, there are 62 columns in each file. After 2020. It has more information, it includes about 138 columns.
+And some column names are different. For example, in some files, it was documented as "NBR_WORKERS_REQUESTED", but in some file, it is listed as "TOTAL_WORKERS_H2A_REQUESTED"
+
+I group by year and see
+> <img src="year_comparison.png" alt="Description" width="800">
+
+
+
+
+
+## Find Farmers and Harvested Crop Datasets
+In USDA, I found farmers dataset in (https://www.nass.usda.gov/Publications/AgCensus/2022/Full_Report/Volume_1,_Chapter_2_US_State_Level/st99_2_045_045.pdf)
+
+![Description](find_farmers.png)
+
+And I collected the information including "Number_of_Produers", "Number_of_Harvested_Farms"...
+![Description](farmers.png)
+
+## Next steps:
+1. H2A workers percentage for each state
+3. Dominant Crops for each state
+3. Analyze revenue data.
+</div>
+
+<p><br></p>
+<h1>January 24th - February 8th Updates</h1>
+<h1>Create state level project(2018 -2023)</h1>
+<h3>Working hours for each week - average</h3>
+<p><img alt="Description" src="hoursProcess.png" /><br>
+<img alt="Description" src="workingHours.png" /></p>
+<h3>salary per hour - median</h3>
+<p><img alt="Description" src="H2ASalary.png" /><br></p>
+<p style="font-size: 20px;">There are some monthly salary in the files, so I assumed 4 weeks for each month, then I calculate hourly salary</p>
+
+<h3>The number of H2A workers</h3>
+<p><img alt="Description" src="numberH2A.png" />
+<img alt="Description" src="Top5H2A.png" /></p>
+<h3>The percentage of H2A workers</h3>
+<p><img alt="Description" src="TopPercentage.png" /><br></p>
+<p style="font-size: 20px;">Nevada has large-scale onion farms, and onions are labor-intensive, requiring hand planting, weeding, and harvesting, which leads to high demand for seasonal labor.</p>
+
+<p><img alt="Description" src="Texas.png" /></p>
+<h2>Next Steps:</h2>
+<p style="font-size: 20px;">
+1. Continue to work on state-level datasets(tax, minimum salary of that state...)<br>
+2. Pesticides used in Dominant crops(reasons, texture, frequency, way...)</p>
+</div>
+<h1>February 9th - Feb 22th Updates</h1>
+<h1>Standard Deviation in year level and state level</h1>
+<h2>Year Level</h2>
+<p><img src="std_by_year.png" alt="Description" width="400"/></p>
+<h2>State Level</h2>
+<p><img src="std_by_state.png" alt="Description" width="400"/></p>
+<p><span style="font-size:24px;"></p>
+<h1>Comments Analysis</h1>
+<h2>1. Comments extraction by Yuri</h2>
+<h2>2. Data Cleaning(Lowercasing， Removing Punctuation，Removing Extra Spaces）</h2>
+<h2>3. Unsupervised Learning exploration: "Topic Modeling", specifically "Latent Dirichlet Allocation" (LDA)</h2>
+<p>Unsupervised learning: we don't directly give the model what we want to predict, we allow the model to discover patterns and structures in the data on its own.</p>
+<div>
+  <img src="top5.png" alt="Topic Model" width="1500"/>
+</div>
+
+<h3>Topic 0:</h3>
+<p><strong>people</strong> <strong>child</strong> <strong>urge</strong> <strong>would</strong> <strong>law</strong> <strong>toxic</strong> <strong>protect</strong> <strong>state</strong> <strong>local</strong> <strong>pesticide</strong>  </p>
+<h2>&gt; People are urging the government to protect children from toxic pesticides through stronger local and state laws.</h2>
+<h3>Topic 1:</h3>
+<p><strong>supporting</strong> <strong>material</strong> <strong>attention</strong> <strong>without</strong> <strong>january</strong> <strong>matter</strong> <strong>period</strong> <strong>petition</strong> <strong>public</strong> <strong>comment</strong>  </p>
+<blockquote>
+<p>A public petition calling for stricter pesticide regulations has gained significant attention this January.</p>
+</blockquote>
+<hr />
+<h3>Topic 2:</h3>
+<p><strong>cause</strong> <strong>without</strong> <strong>substance</strong> <strong>serious</strong> <strong>parasite</strong> <strong>niagara</strong> <strong>canceled</strong> <strong>county</strong> <strong>doctor</strong> <strong>hour</strong>  </p>
+<blockquote>
+<p>Doctors warn that exposure to certain pesticides can cause serious health issues, including chronic diseases.</p>
+</blockquote>
+<hr />
+<h3>Topic 3:</h3>
+<p><strong>safety</strong> <strong>herbicide</strong> <strong>cancer</strong> <strong>health</strong> <strong>glyphosate</strong> <strong>life</strong> <strong>federal</strong> <strong>state</strong> <strong>pesticide</strong> <strong>soil</strong>  </p>
+<blockquote>
+<p>Recent studies suggest that glyphosate, a commonly used herbicide, may be linked to an increased risk of cancer.</p>
+</blockquote>
+<hr />
+<h3>Topic 4:</h3>
+<p><strong>government</strong> <strong>protect</strong> <strong>chemical</strong> <strong>local</strong> <strong>responsibility</strong> <strong>health</strong> <strong>pesticide</strong> <strong>use</strong> <strong>law</strong> <strong>state</strong>  </p>
+<blockquote>
+<p>The government has a responsibility to regulate pesticide use and protect public health.</p>
+</blockquote>
+<h2>4. Deep Learning Model(PEGASUS Model)</h2>
+<p>This method is widely used for news summarization and academic paper summarization... and it can generate fully sentence.</p>
+<div>
+  <img src="summary.png" alt="Topic Model" width="2000"/>
+</div>
+
+<p>But it is not appropriate here. </p>
+<h2>Next Steps:</h2>
+<p style="font-size: 20px;">
+
+</div>
+
+# February 23th - Mar 13th Updates
+
+# More Comments Analysis
+
+## 1. **Comments Extraction by Yuri (500 Comments)**  
+
+## 2. **Data Cleaning**  
+Before diving into the analysis, I cleaned up the data to make it easier to work with. Here’s what I did:  
+- **Lowercasing**: I converted all the text to lowercase to keep things consistent.  
+- **Removing Punctuation**: I got rid of punctuation marks to focus on the actual words.  
+- **Removing Extra Spaces**: I trimmed any unnecessary spaces to make the text clean and uniform.  
+
+## 3. **Removing Personal Information**  
+Privacy is important, so I removed any personal information from the comments. Specifically:  
+- I deleted everything after phrases like "I urge you..." to the end of the comment.  
+- This included things like "Thank you," names, and addresses.  
+
+<div>
+  <img src="original.png" alt="Original Comments" width="600"/>
+</div>
+
+## 4. **Summarizing Comments Using Deep Learning (T5 Model)**  
+To make sense of the comments, I used a T5 deep learning model to summarize each one. Here’s an example of what a summarized comment looks like:  
+
+**Example Summary**:  
+*It is the job of any government to protect citizens from harm. It is not acceptable that people are being exposed to harmful pesticides.*  
+
+## 5. **Unsupervised Learning Exploration: K-Means Clustering with TF-IDF**  
+To group similar comments, **k-means clustering** was applied using **TF-IDF (Term Frequency-Inverse Document Frequency)** for feature extraction. The results are visualized below:
+
+<div>
+  <img src="cluster.png" alt="Clustering Results" width="1700"/>
+</div>
+
+### Observations:  
+- Even though I set three clusters, the comments in each group were pretty much saying the same thing.  
+- I reread the email and googled that organization, I realized most of the comments were directed at a non-profit organization, mainly complaining about pesticides and asking for protection.  
+- This made me think that most of the comments were essentially about the same topic.  
+
+## 6. **Testing the Hypothesis: SBERT + Cosine Similarity**  
+To test my idea, I used **SBERT (Sentence-BERT)** to calculate **cosine similarity** scores between pairs of comments. Here’s how I interpreted the scores:  
+
+- **1.0**: Perfect Match (Identical sentences)  
+- **0.8 - 1.0**: Highly Similar (Almost the same meaning)  
+- **0.6 - 0.8**: Moderately Similar (Same main idea but different wording)  
+- **0.4 - 0.6**: Somewhat Similar (Related but with different focus or expression)  
+- **0.2 - 0.4**: Slightly Similar (Different topics but with some common elements)  
+- **0.0 - 0.2**: Not Similar (Completely different content)  
+
+## 7. **Random Pairwise Similarity Check**  
+To get a better sense of how similar the comments were, I randomly picked two comments at a time and checked their similarity score. I did this over 20 times, and here’s what I found:  
+
+<div>
+  <img src="score.png" alt="Similarity Scores" width="1700"/>
+</div>
+
+### Findings:  
+- More than 70% of the comment pairs had similarity scores between **0.6 - 0.8**, which means they were moderately to highly similar.  
+- Some pairs were as high as **0.95**, while others were as low as **0.5**.  
+
+## 8. **Conclusion**  
+After all this analysis, I can summarize the 500+ comments like this:  
+*You have been given the honor and responsibility to protect the environment of the United States. I urge you to protect Americans from harmful pesticides and reject any efforts to overturn state and local pesticide regulations.*  
+
+
+# Mind Map (Blue = To Do)
+Now that we have collected some data, to make the analysis more organized and to help us see what data still needs to be collected, I created a mind map.
+<div>
+  <img src="Environmental.png" alt="Similarity Scores" width="1500"/>
+</div>
+<div>
+  <img src="Government.png" alt="Similarity Scores" width="1500"/>
+</div>
+
+# Next Steps:
+1. Collecting Data<br>
+2. Research Labor Protection
+</span>
