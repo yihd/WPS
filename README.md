@@ -289,7 +289,71 @@ Now that we have collected some data, to make the analysis more organized and to
 # Next Steps:
 1. Collecting Data<br>
 2. Research Labor Protection
+
+
+<br>
+<br>
+<br>
+
+# Mar 14th - Mar 20th Updates
+
+## Why I Created the "Mind Map"
+1. To identify which columns or datasets need to be collected.  
+2. After training the model, I want to determine which factor has a greater impact on the number of H2A workers — weather or government regulations.
+
+## One More Thing About Comment Analysis
+For our comment analysis, the case is not typical.  
+When dealing with many independent comments or opinions about a product, we can use clustering + sentiment analysis to extract insights.
+
+---
+
+# How to Deal with Datasets
+
+## Possible Target Variables
+- Number of H2A workers  
+- H2A worker percentage  
+- Key factors affecting H2A worker demand
+
+---
+
+## Idea 1: Clustering and Separate Training
+- Manually divide the U.S. into regions (e.g., Midwest, West Coast, East Coast) or economic zones, and train separate models for each.  
+- Alternatively, use unsupervised learning (clustering) to automatically group similar states before training.
+
+---
+
+## Idea 2: Time Series Model
+Models: XGBoost, ARIMA  
+Advantages: Accurate, captures trends over time  
+Disadvantages: Requires more data. I’m concerned that disruptions like COVID-19 or major policy changes may affect the trends and reduce prediction accuracy. (If possible, we can include these events as additional features to help the model adjust.)
+
+If predicting 2025, we need 2018–2024 data for all features.  
+If data is missing, we must replace or impute it.
+
+---
+
+## Idea 3: Feature Importance Analysis
+Advantages: Helps policymakers understand what really influences H2A worker demand  
+
+Methods:  
+- Tree-based models (e.g., XGBoost, Random Forest)  
+- SHAP (Shapley Additive Explanations)  
+- Correlation analysis
+
+Expected results:  
+- Compare feature importance across states (e.g., dominant crops might matter more in California, but weather is more important in Massachusetts)  
+- Compare feature importance across time (e.g., weather might be more important in 2018, but after 2023, policies could play a bigger role)
+
+---
+
+## Idea 4: Deep Learning Model (LSTM,....)
+Advantages:
+- Handles non-linear relationships well  
+- Works with multiple variables  
+- Learns time-based patterns automatically, without manual feature engineering
+
+## Next step:
+- I need more time to organize the datasets and explore each ideas.
+
+
 </span>
-
-
-
