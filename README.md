@@ -356,4 +356,83 @@ Advantages:
 - I need more time to organize the datasets and explore each ideas.
 
 
+
+<br>
+<br>
+
+# Mar 21th - Mar 27th Updates
+This week, I focused on organizing and adding more variables that may influence or reflect H-2A labor patterns.
+
+###  Climate Variables
+- **Cooling Degree Days (CDD)**  
+  - Column: `Mar 2023 - Feb 2024 Cooling Degree Days`  
+  - **Why:** CDD reflects heat accumulation and indirectly represents the **length of the growing season**. A higher CDD implies a warmer climate, which typically extends the planting and harvesting period.
+  
+- **Precipitation**  
+  - Column: `Mar 2023 - Feb 2024 Precipitation`  
+  - **Why:** Precipitation is a direct measure of water availability and is used to approximate drought condition.
+
+###  Economic Variables
+- **State GDP (2018–2023)**  
+  - **Why:** States with stronger economies might create more **job opportunities**, including H-2A positions.
+  
+- **Agricultural GDP (2018–2023)**  
+  - **Why:** States with a high share of agricultural GDP are more likely to **demand farm labor**, making this a key predictor for H-2A workers.
+
+### Geographic Variables
+- **Border with Mexico** (`Yes/No`)  
+  - **Why:** I observed that **Florida** has a low percentage of H-2A certified workers despite being a major agricultural state.  
+    This might be because it's close to Mexico, so employers may prefer hiring **undocumented or local workers** who work for daily cash pay.  
+    This column captures **border-state dynamics** which may influence H-2A usage.
+
+---
+
+##  Current Dataset Structure (By State)
+
+###  Inherent Variables
+- **Climate**
+  - `Mar 2023 - Feb 2024 Cooling Degree Days`
+  - `Mar 2023 - Feb 2024 Precipitation`
+  * _Note: Alaska and Hawaii don't have these resources._*
+
+  
+- **Farming & Land**
+  - `2022 Number_of_Producers`
+  - `2022 Number_of_Harvested_Farms`
+  - `2022 Harvested_Cropland (Acres)`
+  - `2022 Harvested_Cropland (Acres) per Producer`  
+    > *Note: While labeled as 2022, these variables are relatively stable over time.*
+
+- **Geography**
+  - `Border with Mexico or not` (`Yes/No`)
+
+###  Working Conditions
+- `2018–2023 Working Hours per Week`
+- `2018–2023 Median Salary`
+- `2018–2023 State GDP`
+- `2018–2023 Agricultural GDP`
+
+---
+
+## Potential Target Variable
+
+- **Primary:**  
+  - `2018–2023 H-2A Certified Workers` (Yellow-highlighted rows)
+
+- **Future target possibility:**  
+  - `H-2A Worker Percentage` (e.g. Certified H-2A workers divided by total producers or total ag workers)
+
+---
+
+## Still Needed (To Add)
+
+- **Most economically important crop(s)** for each state  
+  > High-value crops often require more manual labor (e.g., berries, tobacco).
+
+- **State income tax policy**  
+  > Some states with no income tax (e.g., Florida, Texas) may be more appealing to workers or employers.
+
+- **Labor Rights Protection**  
+  > I'm not certain this is a strong indicator of whether a state attracts more H2A workers. Labor protections can be difficult for workers to access or fully understand, especially across states. In many cases, workers may prioritize job availability or earnings over legal protections. However, it's still worth considering, I will think about it and explore ways to quantify it if needed.
+
 </span>
