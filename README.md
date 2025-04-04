@@ -435,4 +435,81 @@ This week, I focused on organizing and adding more variables that may influence 
 - **Labor Rights Protection**  
   > I'm not certain this is a strong indicator of whether a state attracts more H2A workers. Labor protections can be difficult for workers to access or fully understand, especially across states. In many cases, workers may prioritize job availability or earnings over legal protections. However, it's still worth considering, I will think about it and explore ways to quantify it if needed.
 
+
+
+# Mar 28th – Apr 3rd Updates
+
+## Goal
+Use time series modeling to predict the number of H-2A workers in California for the year 2023, based on data from 2018–2022.
+
+---
+
+## Modeling Options
+
+### Option 1: XGBoost Regression
+- **Pros**: Handles many features, captures nonlinear relationships.
+- **Cons**: Very small dataset (only 5 years), which leads to overfitting.
+
+**What happened?**  
+I tried it, but XGBoost returned no meaningful results. The default configuration requires at least 20 data points due to `min_data_in_leaf=20` and `min_data_in_bin=3`. My dataset only has 5, so it failed to train.
+
+---
+
+### Option 2: Prophet (Time Series)
+
+#### Pre-training insights:
+1. Variables that are stable across years (like state-level constants) don’t contribute to prediction.
+2. In California, the variables that actually change over time are:  
+   - Climate  
+   - Precipitation  
+   - Working hours  
+   - Median hourly salary  
+   - GDP  
+   - Agriculture GDP  
+3. The dataset is small, so using too many variables may cause overfitting.
+
+---
+
+### Prophet Modeling Results
+
+**Ground truth**: The actual number of 2023 H-2A workers is **30,134**.
+
+- **Model 1: Only past H-2A numbers (no regressors)**  
+  → Prediction: **28,041.68**
+
+- **Model 2: Add all variables**  
+  → Result: **Negative value**  
+  ![Example of incorrect output](negative.png)  
+  Likely because GDP and AgGDP are too large in scale and skew the model.
+
+- **Model 3: Normalize variables (mean=0, std=1)**  
+  → Result: **74,363** (overcorrected, still too far off)
+
+- **Model 4: Remove GDP and AgGDP**  
+  → Result: **24,667.46** (improved, but still off)
+
+- **Model 5: Only use Salary + Working Hours**  
+  → Result: **31,118**  Best result — very close to actual 
+  
+ 
+---
+
+## Why did this work?
+
+Keeping only Salary and Hours helps because:
+- They directly reflect labor market conditions
+- They have enough variation over time
+- The model avoids noise from unrelated or oversized variables (like GDP)
+However, it's important to note that this result may have been partly coincidental and it doesn't mean other variables are unimportant. In a second run with the same setup, the prediction was not as close — highlighting how sensitive the model is to small changes.
+
+---
+
+## Challenges and Future Ideas
+
+1. With only 5 rows and 6 variables, the dataset is highly prone to overfitting, and the model outputs tend to fluctuate significantly from small changes in input.  
+2. 2024 data will be incomplete until Sept 30 from government website → prediction for 2025 may require assumptions  
+3. If we continue using time series methods, we may focus on a few states with complete data from 2004 onward. Not all states have reliable records, and getting all the historical data might take a lot of effort.
+4. Also I need to think about what other factors affect H2A workers over years。
+
+
 </span>
